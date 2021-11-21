@@ -1,5 +1,6 @@
 
 const express = require('express')
+const fileUpload = require('express-fileupload')
 const app = express()
 const cors = require('cors')
 const { MongoClient } = require('mongodb');
@@ -7,6 +8,7 @@ const ObjectId = require('mongodb').ObjectId;
 const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
+app.use(fileUpload())
 require('dotenv').config()
 
 
@@ -20,15 +22,39 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
             const database = client.db("bongoServiec")
         const dataCollection = database.collection("bongoinfo")
         const dataCollection2 = database.collection("allOrders")
+        console.log('database connected')
 
 
         //  post api
-        app.post('/addService', async (req,res)=>{
-            const service = req.body;
-            const result = await dataCollection.insertOne(service);
-            res.send(result)
+        // app.post('/addService', async (req,res)=>{
+        //     const service = req.body;
+        //     const result = await dataCollection.insertOne(service);
+        //     res.send(result)
 
+        // })
+
+
+        // add service with img upload 
+        app.post('/addService', async (req,res)=>{
+            // console.log('body', req.body)
+            const title= req.body.title;
+            const price = req.body.price;
+            const description = req.body.description;
+            const picture = req.files.image;
+            const pictureData = picture.data;
+            const encodedPicture = pictureData.toString('base64')
+            const imageBuffer = Buffer.from(encodedPicture, 'base64')
+            const services = {
+                title,
+                price,
+                description,
+                image: imageBuffer
+            }
+            const result = await dataCollection.insertOne(services)
+            
+            res.json(result)
         })
+
 
         // get api
         app.get('/services', async (req,res)=>{

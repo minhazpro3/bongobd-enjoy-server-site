@@ -22,7 +22,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
             const database = client.db("bongoServiec")
         const dataCollection = database.collection("bongoinfo")
         const dataCollection2 = database.collection("allOrders")
-        console.log('database connected!')
+        console.log('database connected')
 
 
         // add service with img upload 

@@ -22,21 +22,11 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
             const database = client.db("bongoServiec")
         const dataCollection = database.collection("bongoinfo")
         const dataCollection2 = database.collection("allOrders")
-        console.log('database connected')
-
-
-        //  post api
-        // app.post('/addService', async (req,res)=>{
-        //     const service = req.body;
-        //     const result = await dataCollection.insertOne(service);
-        //     res.send(result)
-
-        // })
+        console.log('database connected!')
 
 
         // add service with img upload 
         app.post('/addService', async (req,res)=>{
-            // console.log('body', req.body)
             const title= req.body.title;
             const price = req.body.price;
             const description = req.body.description;
